@@ -28,6 +28,11 @@ RSpec.describe User, type: :model do
         @user.valid?
         expect(@user.errors.full_messages).to include("Email can't be blank")
       end
+      it "メールアドレスに@を含まない場合は登録できない" do
+        @user.email = 'testtest.com'
+        @user.valid?
+        expect(@user.errors.full_messages).to include("Email is invalid")
+      end
       it "重複したemailが存在する場合登録できない" do
         @user.save
         another_user = FactoryBot.build(:user)
@@ -45,6 +50,12 @@ RSpec.describe User, type: :model do
         @user.password_confirmation = '11111'
         @user.valid?
         expect(@user.errors.full_messages).to include("Password is too short (minimum is 6 characters)")
+      end
+      it "全角文字を含むパスワードでは登録できない" do
+        @user.password = 'あabc123'
+        @user.password_confirmation = 'あabc123'
+        @user.valid?
+        expect(@user.errors.full_messages).to include("Password is invalid")
       end
       it "passwordが英語のみだと登録できない" do
         @user.password = 'abcdef'
