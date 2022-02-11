@@ -14,7 +14,7 @@ RSpec.describe OrderAddress, type: :model do
         expect(@order_address).to be_valid
       end
       it 'buildingが空でも保存できる' do
-        @order_address.building = nil
+        @order_address.building = ''
         expect(@order_address).to be_valid
       end
     end
@@ -35,7 +35,7 @@ RSpec.describe OrderAddress, type: :model do
         expect(@order_address.errors.full_messages).to include("Postal code can't be blank")
       end
       it '郵便番号(postal_code)にハイフンが無いと保存できない' do
-        @order_address.postal_code = 1234567
+        @order_address.postal_code = '1234567'
         @order_address.valid?
         expect(@order_address.errors.full_messages).to include("Postal code is invalid. Include hyphen(-)")
       end
